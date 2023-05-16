@@ -25,4 +25,4 @@ jobs:
         uses: azure/powershell@v1
         with:
           inlineScript: |
-            	Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
+            Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
