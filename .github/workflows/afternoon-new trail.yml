@@ -26,5 +26,6 @@ jobs:
         run: |
           $username = "${{ secrets.AZURE_USERNAME }}"
           $password = "${{ secrets.AZURE_PASSWORD }}"
-          $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, ($password | ConvertTo-SecureString -AsPlainText -Force)
-          Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "C:\Users\Satyakumar_Surisetti\Desktop\sqlfiles\just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
+
+          # Your PowerShell commands here
+          Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
