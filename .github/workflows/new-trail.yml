@@ -1,4 +1,4 @@
-name: Upload SQL to Azure Synapse
+name: My Workflow
 
 on:
   push:
@@ -6,23 +6,22 @@ on:
       - main
 
 jobs:
-  upload-sql:
+  my-job:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Azure PowerShell
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Set up Azure CLI
+      uses: azure/setup-azure-cli@v1
 
-      - name: Upload SQL files to Azure Synapse
-        run: |
+    - name: Login to Azure
+      run: |
+        az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-         $credential = Get-Credential
-         Connect-AzAccount -Credential $credential
-
-         Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
-
+    - name: Run PowerShell script
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
