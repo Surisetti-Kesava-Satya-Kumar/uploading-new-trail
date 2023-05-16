@@ -1,0 +1,30 @@
+name: My Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Azure CLI
+        uses: azure/cli@v1
+
+      - name: Login to Azure
+        run: |
+          az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Run PowerShell script
+        shell: pwsh
+        run: |
+          $username = "${{ secrets.AZURE_USERNAME }}"
+          $password = "${{ secrets.AZURE_PASSWORD }}"
+          $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, ($password | ConvertTo-SecureString -AsPlainText -Force)
+          Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "C:\Users\Satyakumar_Surisetti\Desktop\sqlfiles\just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
