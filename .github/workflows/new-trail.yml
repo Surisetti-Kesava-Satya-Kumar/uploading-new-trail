@@ -20,11 +20,11 @@ jobs:
 
       - name: Upload SQL files to Azure Synapse
         run: |
-          $localFolderPath = "<path_to_sql_folder>"
-          $serverName = "<azure_synapse_server_name>"
-          $databaseName = "<azure_synapse_database_name>"
-          $username = "<username>"
-          $password = "<password>"
+          $localFolderPath = sqlfiles
+          $serverName = "satya-synapse-demo"
+          $databaseName = "RAMS-demo"
+          $username = "Admin"
+          $password = "@Mna8888ES"
           
           $files = Get-ChildItem -Path $localFolderPath -Filter *.sql -File
           $connectionString = "Server=tcp:$serverName.database.windows.net,1433;Initial Catalog=$databaseName;Persist Security Info=False;User ID=$username;Password=$password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
