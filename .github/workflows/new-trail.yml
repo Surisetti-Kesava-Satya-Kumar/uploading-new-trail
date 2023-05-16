@@ -20,14 +20,9 @@ jobs:
 
       - name: Upload SQL files to Azure Synapse
         run: |
-         $workspaceName = "satya-synapse-demo"
-         $scriptName = "just-uploaded.sql"
-         $scriptFilePath = "C:\Users\Satyakumar_Surisetti\Desktop\sqlfiles\just-uploaded.sql"
-         $sqlPoolName = "Built-in"
-         $databaseName = "RAMS-demo"
 
          $credential = Get-Credential
          Connect-AzAccount -Credential $credential
 
-         Set-AzSynapseSqlScript -WorkspaceName $workspaceName -ScriptName $scriptName -File $scriptFilePath -SqlPoolName $sqlPoolName -DatabaseName $databaseName
+         Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "C:\Users\Satyakumar_Surisetti\Desktop\sqlfiles\just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
 
