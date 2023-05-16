@@ -20,14 +20,14 @@ jobs:
 
       - name: Upload SQL files to Azure Synapse
         run: |
-         $serverName = "satya-synapse-demo"
+         $workspaceName = "satya-synapse-demo"
+         $scriptName = "just-uploaded.sql"
+         $scriptFilePath = "C:\Users\Satyakumar_Surisetti\Desktop\sqlfiles\just-uploaded.sql"
+         $sqlPoolName = "Built-in"
          $databaseName = "RAMS-demo"
-         $username = "Admin"
-         $password = "@Mna8888"
-         $sqlScriptPath = "\sqlfiles"
 
-         $connectionString = "Server=tcp:$serverName.database.windows.net,1433;Initial Catalog=$databaseName;Persist Security Info=False;User ID=$username;Password=$password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+         $credential = Get-Credential
+         Connect-AzAccount -Credential $credential
 
-         $sqlScript = Get-Content $sqlScriptPath | Out-String
+         Set-AzSynapseSqlScript -WorkspaceName $workspaceName -ScriptName $scriptName -File $scriptFilePath -SqlPoolName $sqlPoolName -DatabaseName $databaseName
 
-         Invoke-SqlCmd -ConnectionString $connectionString -Query $sqlScript
