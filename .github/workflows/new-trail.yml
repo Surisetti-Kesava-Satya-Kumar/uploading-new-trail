@@ -1,0 +1,35 @@
+name: Upload SQL to Azure Synapse
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload-sql:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Azure PowerShell
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Upload SQL files to Azure Synapse
+        run: |
+          $localFolderPath = "<path_to_sql_folder>"
+          $serverName = "<azure_synapse_server_name>"
+          $databaseName = "<azure_synapse_database_name>"
+          $username = "<username>"
+          $password = "<password>"
+          
+          $files = Get-ChildItem -Path $localFolderPath -Filter *.sql -File
+          $connectionString = "Server=tcp:$serverName.database.windows.net,1433;Initial Catalog=$databaseName;Persist Security Info=False;User ID=$username;Password=$password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+          foreach ($file in $files) {
+              $sqlScript = Get-Content $file.FullName | Out-String
+              Invoke-SqlCmd -ConnectionString $connectionString -Query $sqlScript
+          }
