@@ -21,4 +21,4 @@ jobs:
 
       - name: Upload SQL files to Azure Synapse
         run: |
-          Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
+          az synapse sql script set --workspace-name satya-synapse-demo --sql-pool-name "Built-in" --database-name "RAMS-demo" --script-file "just-uploaded.sql"
