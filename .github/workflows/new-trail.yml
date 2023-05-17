@@ -1,4 +1,4 @@
-name: Upload SQL Files to Azure Synapse
+name: Upload SQL to Azure Synapse
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  upload-sql-files:
+  upload-sql:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,21 +14,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up Azure CLI
-        uses: azure/cli@v1
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Login to Azure
+      - name: Upload SQL files to Azure Synapse
         run: |
-          az login --service-principal --username ${{ secrets.AZURE_CLIENT_ID }} --password ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
-          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-#       - name: Upload SQL Files
-#         run: |
-#           az storage blob upload-batch --account-name <storage-account-name> --account-key <storage-account-key> --destination-container <container-name> --source "<local-folder-path>" --pattern "*.sql"
-
-      - name: Set SQL Scripts in Azure Synapse
-        run: |
-          $credential = Get-Credential
-          Connect-AzAccount -Credential $credential
-
-          # Set the SQL scripts in Azure Synapse
           Set-AzSynapseSqlScript -WorkspaceName satya-synapse-demo -DefinitionFile "just-uploaded.sql" -SqlPoolName "Built-in" -SqlDatabaseName "RAMS-demo"
